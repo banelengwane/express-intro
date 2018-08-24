@@ -153,7 +153,7 @@ module.exports = function CalculateSettingBill() {
     if (total >= settingWarning && total < settingCritical){
       // adding the danger class will make the text red
       return 'warning';
-    }else if (total >= settingCritical) {
+    }else if (total >= settingCritical && total !== 0) {
       return 'danger';
     }else if (total < settingWarning) {
       return '';
