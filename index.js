@@ -11,7 +11,19 @@ let app = express();
 
 const settingsBill = SettingsBill();
 //setting up handlebars
-let myhbp = exphbs.create({ defaultLayout: 'main', helpers: 'helpers' });
+let myhbp = exphbs.create({ 
+	defaultLayout: 'main', 
+	
+	helpers: {
+		'time': function () {
+			return Moment(this.timestamp).fromNow();
+		},
+		'twoDigits': function(numbertoRound){
+			return Number(numbertoRound).toFixed(2);
+		}
+	} 
+
+});
 app.engine('handlebars', myhbp.engine);
 app.set('view engine', 'handlebars');
 
@@ -53,22 +65,14 @@ app.post('/action', function (req, res) {
 
 app.get('/actions', function (req, res) {
 	res.render('actions', {
-		actions: settingsBill.actions(), helpers: {
-			'time': function () {
-				return Moment(this.timestamp).fromNow();
-			}
-		}
+		actions: settingsBill.actions()
 	});
 });
 
 app.get('/actions/:actionType', function (req, res) {
 	let actionType = req.params.actionType;
 	res.render('actions', {
-		actions: settingsBill.actionsFor(actionType), helpers: {
-			'time': function () {
-				return Moment(this.timestamp).fromNow();
-			}
-		}
+		actions: settingsBill.actionsFor(actionType)
 	});
 });
 
